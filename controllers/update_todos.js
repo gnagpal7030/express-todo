@@ -22,12 +22,12 @@ export default async (req, res) => {
   await Promise.all(
     todoData.map((todo) =>
       todoModel.findOneAndUpdate(
-        todo.id ? { _id: todo.id } : { name: todo.name },
+        todo.id ? { _id: todo.id } : { name: todo.name }, // only use first filter to see the reason
         {
           name: todo.name,
           status: todo.status,
         },
-        { new: true, upsert: true }
+        { upsert: true }
       )
     )
   );
@@ -63,14 +63,11 @@ export default async (req, res) => {
 
   The update fields you provided
 
-  If todo.id is missing, the filter is { name: todo.name }.
+  When I use only _id filter in upsert operation, and _id is not passed from the UI, it considers the _id field as null to store as it considers fields to use from the filter itself
 
-  If no document matches that name, MongoDB will insert a new document that includes:
+  new: true → Return the updated document instead of the old one.
 
-  name from the filter
-  name and status from the update
-  (if a field is in both, the update value wins — here it’s the same value anyway)
-  a generated _id
+ upsert: true → If no matching document is found, create a new document.
 
   */
   res.status(200).json({

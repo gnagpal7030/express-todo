@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const validateID = (id) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
+    console.log("invalid id passed");
     throw new Error("invalid ID passed");
   }
   return;

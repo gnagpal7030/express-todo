@@ -25,7 +25,7 @@ export default async (req, res) => {
       validateID(todoID);
     } catch (err) {
       res.status(400).json({
-        message: err,
+        message: err.message,
       });
       return;
     }
